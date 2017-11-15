@@ -66,12 +66,10 @@ class Train
             $dataArray[] = $type['title']. ' - '. $type['places'];
         }
         $massege = implode(PHP_EOL, $dataArray);
-        $bot = new \TelegramBot\Api\BotApi('191485590:AAGYozNclpq2uFVEoz3kQdvr3bSWkcm2rmI');
-        $bot->sendMessage('135505641', $massege);
-        die();
+        $massegeForLog = implode('|', $dataArray);
 
 
-        $fp = fopen(self::FILE_DOWNLOADS . "/sku.txt", "r");
+        $fp = fopen(__DIR__."/../data/product_log.txt", "r");
         if ($fp) {
             $skulist = [];
             while (($buffer = fgets($fp, 4096)) !== false) {
@@ -82,18 +80,25 @@ class Train
             }
             fclose($fp);
         }
+
+        $oldValue = $this->removeNl(end($skulist));
+
+        $f = fopen(__DIR__."/../data/product_log.txt", 'a+');
+        fwrite($f, $massegeForLog . PHP_EOL);
+        fclose($f);
+
+        if ($oldValue != $massegeForLog){
+            $bot = new \TelegramBot\Api\BotApi('191485590:AAGYozNclpq2uFVEoz3kQdvr3bSWkcm2rmI');
+            $bot->sendMessage('135505641', $massege);
+        }
+
+        die();
+
     }
 
-    public
-    function array2csvLine(array &$row, $filename)
+    public static function removeNl(string $string)
     {
-        if (count($row) == 0) {
-            return null;
-        }
-        $df = fopen($filename . '.csv', 'a');
-        fputcsv($df, $row, '|', chr(0));
-        fclose($df);
-        return ob_get_clean();
+        return trim(preg_replace('/\r\n|\r|\n/u', '', $string));
     }
 
 }
