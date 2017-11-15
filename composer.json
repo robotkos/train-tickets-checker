@@ -1,0 +1,21 @@
+{
+  "name": "Caridpars1",
+  "license": "MIT",
+  "type": "project",
+  "require": {
+    "php": ">=7.1",
+    "Caridpars": "dev-master",
+    "fabpot/goutte": "^3.2",
+    "symfony/var-dumper": "^3.3",
+    "dunglas/php-torcontrol": "^1.0",
+    "doctrine/orm": "^2.5",
+    "telegram-bot/api": "^2.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Parsers\\": "Parsers",
+      "Util\\": "Util",
+      "": "src/"
+    }
+  }
+}
